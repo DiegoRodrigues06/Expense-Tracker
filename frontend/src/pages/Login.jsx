@@ -1,15 +1,17 @@
 import { Link } from "react-router-dom";
 
 export default function Login() {
+
+    // --- Botão entrar ---
+    // const handleLogin = () => {  
+    // }
+
   return (
     <>
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-slate-900/70 border border-slate-700/70 rounded-2xl shadow-2xl backdrop-blur-sm p-8">
         {/* Logo / título */}
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/20 border border-blue-400/40">
-            <span className="text-blue-400 text-2xl font-bold">ₑ</span>
-          </div>
           <h1 className="text-2xl font-semibold text-slate-50">
             Expense Tracker
           </h1>
@@ -68,12 +70,15 @@ export default function Login() {
             </label>
           </div>
 
-          <button
-            type="submit"
-            className="mt-2 w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-blue-900/40 transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-slate-900"
-          >
+          <div className="mt-2 w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-blue-900/40 transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-slate-900 text-center">
+            <Link
+              to="/home"
+              type="submit"    
+            >
             Entrar
-          </button>
+            </Link>
+          </div>
+          
         </form>
 
         {/* Rodapé */}

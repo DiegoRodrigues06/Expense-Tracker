@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center px-4">
@@ -5,9 +7,6 @@ export default function RegisterPage() {
         
         {/* Logo / título */}
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/20 border border-blue-400/40">
-            <span className="text-blue-400 text-2xl font-bold">ₑ</span>
-          </div>
           <h1 className="text-2xl font-semibold text-slate-50">
             Criar Conta
           </h1>
@@ -21,7 +20,7 @@ export default function RegisterPage() {
           
           <div className="space-y-1">
             <label htmlFor="name" className="block text-sm font-medium text-slate-200">
-              Nome completo
+              Nome
             </label>
             <input
               id="name"
@@ -78,12 +77,11 @@ export default function RegisterPage() {
         {/* Rodapé */}
         <p className="mt-6 text-center text-xs text-slate-500">
           Já tem uma conta?{" "}
-          <button
-            type="button"
+          <Link to="/"
             className="font-medium text-blue-400 hover:text-blue-300"
           >
             Entrar
-          </button>
+          </Link>
         </p>
       </div>
     </div>
