@@ -6,9 +6,6 @@ export default function Navbar({ userName = "Usuário" }) {
       
       {/* Logo */}
       <div className="flex items-center gap-2">
-        <div className="h-8 w-8 flex items-center justify-center rounded-lg bg-blue-500/20 border border-blue-400/40">
-          <span className="text-blue-400 font-bold text-xl">ₑ</span>
-        </div>
         <h1 className="text-slate-100 font-semibold text-lg">
           Expense Tracker
         </h1>
@@ -16,14 +13,11 @@ export default function Navbar({ userName = "Usuário" }) {
 
       {/* Navegação */}
       <nav className="hidden md:flex items-center gap-6">
-        <Link className="text-slate-300 hover:text-blue-400 transition" to="/dashboard">
+        <Link className="text-slate-300 hover:text-blue-400 transition" to="/dashboards">
           Dashboard
         </Link>
         <Link className="text-slate-300 hover:text-blue-400 transition" to="/expenses">
           Gastos
-        </Link>
-        <Link className="text-slate-300 hover:text-blue-400 transition" to="/categories">
-          Categorias
         </Link>
       </nav>
 

@@ -23,3 +23,17 @@ dist-ssr
 *.sln
 *.sw?
 *.txt
+
+# HTTP test files
+*.http
+
+# Development secrets
+backendappsettings.Development.json
+
+# .NET build folders
+backend/bin/
+backend/obj/
+
+# .NET user files
+*.csproj.user
+*.suo

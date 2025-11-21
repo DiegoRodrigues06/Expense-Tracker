@@ -1,36 +1,39 @@
 import Navbar from "../components/Navbar";
 
 export default function Home() {
+
+    const isLoggedIn = true; // por enquanto sempre true
+    
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center px-6">
+            <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center px-6">
                 <div className="max-w-3xl text-center">
 
                     {/* Título */}
                     <h1 className="text-4xl md:text-5xl font-extrabold text-white drop-shadow-lg">
-                        Controle seus gastos com facilidade.
+                        Controle seus gastos e construa metas com facilidade.
                     </h1>
 
                     <p className="mt-4 text-lg text-slate-400">
-                        Um painel simples, moderno e seguro para acompanhar seus gastos,
-                        categorias e evolução financeira.
+                        Um painel simples e moderno para acompanhar seus gastos
+                        e evolução financeira.
                     </p>
 
                     {/* Botões */}
                     <div className="mt-8 flex flex-col md:flex-row items-center justify-center gap-4">
                         <a
-                            href="/dashboard"
+                            href="/dashboards"
                             className="px-6 py-3 rounded-lg text-white font-medium bg-blue-600 hover:bg-blue-500 transition shadow-lg shadow-blue-900/40"
                         >
                             Ir para Dashboard
                         </a>
 
                         <a
-                            href="/expenses"
+                            href="/expenses/budget-form"
                             className="px-6 py-3 rounded-lg text-blue-300 font-medium border border-blue-600 hover:border-blue-400 hover:text-blue-200 transition"
                         >
-                            Ver Gastos
+                            {isLoggedIn ? "Gerenciar Gastos" : "Começar Agora"}
                         </a>
                     </div>
 
