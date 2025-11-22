@@ -28,7 +28,7 @@ dist-ssr
 *.http
 
 # Development secrets
-backendappsettings.Development.json
+backend/appsettings.Development.json
 
 # .NET build folders
 backend/bin/
