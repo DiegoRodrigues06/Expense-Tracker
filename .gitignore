@@ -31,7 +31,7 @@ dist-ssr
 # Development secrets
 backend/appsettings.Development.json
 backend/global.json
-backend/Migrations/
+backend/Migrations
 *.db
 
 # .NET build folders

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using backend.data;
 using backend.models;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace backend.controller
 {
@@ -15,6 +16,7 @@ namespace backend.controller
             _appDbContext = appDbContext;
         }
 
+        // ---- Criar usuário ---
         [HttpPost]
         public async Task<IActionResult> CreateUser (Users user)
         {
@@ -22,6 +24,15 @@ namespace backend.controller
             await _appDbContext.SaveChangesAsync();
 
             return Ok(user);
+        }
+
+        // ---- Buscar usuário ---
+        [HttpGet]
+        public IActionResult GetUsers ()
+        {
+            var users = _appDbContext.Users.ToList();
+            
+            return Ok(users);
         }
     }
 }
