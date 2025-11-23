@@ -23,6 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 *.txt
+*.env
 
 # HTTP test files
 *.http
@@ -30,6 +31,8 @@ dist-ssr
 # Development secrets
 backend/appsettings.Development.json
 backend/global.json
+backend/Migrations/
+*.db
 
 # .NET build folders
 backend/bin/

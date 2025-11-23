@@ -10,5 +10,6 @@ namespace backend.data
         }
 
         public DbSet<Users> Users{ get; set;}
+        public DbSet<Expense> Expenses{ get; set;}
     }
 }
