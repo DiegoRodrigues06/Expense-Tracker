@@ -13,6 +13,10 @@ namespace backend.models
 
         //  chave estrangeira
         public int UsersID { get; set; }
+        // relacionamento
         public Users User { get; set; }
+
+        public int CategoryID { get; set; }
+        public Category category { get; set; }
     }
 }
