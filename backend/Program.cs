@@ -3,19 +3,19 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(options => // permitir interação entre o front e o back (dois hosts diferentes)
+builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReact",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173") 
+            policy.WithOrigins("http://localhost:5173")
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();
         });
 });
 
-// Add services to the container.
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -27,8 +27,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(connectionString);
 });
 
-
 var app = builder.Build();
+
+
+app.UseCors("AllowReact");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -37,10 +39,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapControllers(); 
-
 app.UseHttpsRedirection();
 
+app.MapControllers();
+
 app.Run();
-
-

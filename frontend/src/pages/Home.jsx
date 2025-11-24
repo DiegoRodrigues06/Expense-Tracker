@@ -2,7 +2,6 @@ import Navbar from "../components/Navbar";
 
 export default function Home() {
 
-    const isLoggedIn = true; // por enquanto sempre true
     
     return (
         <>
@@ -33,7 +32,7 @@ export default function Home() {
                             href="/expenses/budget-form"
                             className="px-6 py-3 rounded-lg text-blue-300 font-medium border border-blue-600 hover:border-blue-400 hover:text-blue-200 transition"
                         >
-                            {isLoggedIn ? "Gerenciar Gastos" : "Começar Agora"}
+                            Gerenciar Gastos
                         </a>
                     </div>
 

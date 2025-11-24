@@ -24,7 +24,7 @@ export default function Dashboards() {
 
     return (
     <>
-        <Navbar userName="Sillver"/>
+        <Navbar/>
         <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
             
 
