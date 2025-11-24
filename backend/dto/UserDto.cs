@@ -1,9 +1,13 @@
 namespace backend.dto
 {
-    public class LoginDto
+    public class UserDto
     {
-        public string Email { get; set; }
-        public string Senha { get; set; }
+        public class LoginDto
+        {
+            public string Email { get; set; }
+            public string Senha { get; set; }
+        }
+    
     }
     
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using backend.data;
 using backend.models;
+using backend.dto;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -59,7 +60,7 @@ namespace backend.controller
 
         // ---- Função Login ----
         [HttpPost("login")]
-        public IActionResult Login([FromBody] Users loginDto)
+        public IActionResult Login([FromBody] UserDto.LoginDto loginDto)
         {
             try
             {
@@ -75,11 +76,9 @@ namespace backend.controller
 
             return Ok();
 
-            } catch (Exception e) 
+            } catch (Exception) 
             {
-                Console.WriteLine(e);
-
-                return StatusCode(500, "Erro ao logar.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao logar.");
             }
             
         }

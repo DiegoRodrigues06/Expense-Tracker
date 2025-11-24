@@ -8,59 +8,59 @@ using Microsoft.EntityFrameworkCore;
 namespace backend.controller
 {
     [ApiController]
-    [Route("api/expense")]
-    public class ExpenseController : ControllerBase
+    [Route("api/category")]
+    public class categoryController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
 
-        public ExpenseController(AppDbContext appDbContext)
+        public categoryController(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
 
-        // ---- Criar despesa ----
+        // ---- Criar categoria ----
         [HttpPost]
-        public async Task<IActionResult> CreateExpense (Expense expense)
+        public async Task<IActionResult> CreateCategory (Category category)
         {
-            _appDbContext.Expenses.Add(expense);
+            _appDbContext.Category.Add(category);
             await _appDbContext.SaveChangesAsync();
 
-            return Ok(expense);
+            return Ok(category);
         }
 
         // ---- Buscar despesas ----
         [HttpGet]
-        public IActionResult GetExpenses ()
+        public IActionResult GetCategories ()
         {
-            var expenses = _appDbContext.Expenses.ToList();
+            var category = _appDbContext.Category.ToList();
             
-            return Ok(expenses);
+            return Ok(category);
         }
 
         // ---- Buscar despesa pelo ID ----
         [HttpGet("{id}")]
-        public IActionResult GetExpenseById (int id)
+        public IActionResult GetCategoryById (int id)
         {
-            var expense = _appDbContext.Expenses.Find(id);
+            var category = _appDbContext.Category.Find(id);
 
-            return Ok(expense);
+            return Ok(category);
         }
 
         // ---- Deletar despesa pelo ID ----
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteExpense (int id)
+        public async Task<IActionResult> DeleteCategory (int id)
         {   
-            var deletedExpense = _appDbContext.Expenses.Find(id);
-            if (deletedExpense == null) return NotFound();
+            var deletedCategory = _appDbContext.Category.Find(id);
+            if (deletedCategory == null) return NotFound();
 
-            _appDbContext.Expenses.Remove(deletedExpense);
+            _appDbContext.Category.Remove(deletedCategory);
             await _appDbContext.SaveChangesAsync();
-            return Ok(deletedExpense);
+            return Ok(deletedCategory);
         }
 
-        // ---- Atualizar despesa ----
+        // ---- Atualizar categorias ----
         [HttpPatch]
-        public async Task<IActionResult> UpdateExpense(int id, [FromBody] ExpenseDto.ExpenseUpdateDto updateDto)
+        public async Task<IActionResult> UpdateExpense(int id, [FromBody] CategoryDto updateDto)
         {
             // Validação de ID
             if (updateDto == null)
@@ -70,35 +70,23 @@ namespace backend.controller
 
             // Busca a despesa original no banco de dados
             // Inclui .FirstOrDefaultAsync() e AsTracking() para permitir modificação
-            var expenseToUpdate = await _appDbContext.Expenses.FirstOrDefaultAsync(e => e.Id == id);
+            var expenseToUpdate = await _appDbContext.Category.FirstOrDefaultAsync(e => e.Id == id);
             if (expenseToUpdate == null)
             {
                 return NotFound($"Despesa com ID {id} não encontrada.");
             }
             
             bool isModified = false;
-
-            if (updateDto.Budget.HasValue)
-            {
-                expenseToUpdate.Budget = updateDto.Budget.Value;
-                isModified = true;
-            }
             
-            if (!string.IsNullOrEmpty(updateDto.Description))
+            if (!string.IsNullOrEmpty(updateDto.Name))
             {
-                expenseToUpdate.Description = updateDto.Description;
+                expenseToUpdate.Name = updateDto.Name;
                 isModified = true;
             }
 
-            if (updateDto.Value.HasValue)
+            if (!string.IsNullOrEmpty(updateDto.Icon))
             {
-                expenseToUpdate.Value = updateDto.Value.Value; // Usa .Value para acessar o valor subjacente
-                isModified = true;
-            }
-            
-            if (!string.IsNullOrEmpty(updateDto.Goal))
-            {
-                expenseToUpdate.Goal = updateDto.Goal;
+                expenseToUpdate.Icon = updateDto.Icon;
                 isModified = true;
             }
         

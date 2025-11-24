@@ -5,9 +5,9 @@ namespace backend.models
     public class Expense
     {
         public int Id { get; set; }
-        public float Budget { get; set;}
+        public decimal Budget { get; set;}
         public string Description { get; set; }
-        public float Value { get; set; }
+        public decimal Value { get; set; }
         public string Goal { get; set; }
         public DateTime Date { get; set; }
 
