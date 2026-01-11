@@ -39,9 +39,30 @@ namespace backend.controller
 
         // ---- Buscar despesa pelo ID ----
         [HttpGet("{id}")]
-        public IActionResult GetExpenseById (int id)
+        public async Task<IActionResult> GetExpense(int id)
         {
-            var expense = _appDbContext.Expenses.Find(id);
+            var expense = await _appDbContext.Expenses
+                .Where(e => e.Id == id) // onde expenseId for igual ao ID passado
+                .Select(e => new ExpenseDto.ExpenseResponseDto 
+                // crio um novo objeto E.R.Dto e uso o .Select para buscar apenas os dados necessários
+                {
+                    Id = e.Id,
+                    Budget = e.Budget,
+                    Description = e.Description,
+                    Value = e.Value,
+                    Goal = e.Goal,
+                    Date = e.Date,
+
+                    UsersID = e.UsersID,
+                    UserName = e.User.Name,
+
+                    CategoryID = e.CategoryID,
+                    CategoryName = e.category.Name
+                })
+                .FirstOrDefaultAsync();
+
+            if (expense == null)
+                return NotFound();
 
             return Ok(expense);
         }

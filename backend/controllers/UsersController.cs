@@ -39,9 +39,30 @@ namespace backend.controller
 
         // ---- Buscar usuário pelo ID ----
         [HttpGet("{id}")]
-        public IActionResult GetUserById (int id)
+        public async Task<IActionResult> GetUserById(int id)
         {
-            var user = _appDbContext.Users.Find(id);
+            var user = await _appDbContext.Users
+                .Where(u => u.Id == id)
+                .Select(u => new UserDto.UserResponseDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    Email = u.Email,
+
+                    Expenses = u.Expenses.Select(e => new UserDto.UserExpenseDto
+                    {
+                        Id = e.Id,
+                        Budget = e.Budget,
+                        Description = e.Description,
+                        Value = e.Value,
+                        Goal = e.Goal,
+                        Date = e.Date
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+                return NotFound();
 
             return Ok(user);
         }

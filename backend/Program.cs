@@ -1,4 +1,5 @@
 using backend.data;
+using backend.helpers;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,7 +31,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var app = builder.Build();
 
 
-app.UseCors("AllowReact");
+// app.UseCors("AllowReact");
+
+// app.UseMiddleware<AuthMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
