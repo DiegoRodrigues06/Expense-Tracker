@@ -5,10 +5,18 @@ import api from "../service/apiConnection.js";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [loading, setLoading] = useState(false); // Estado para o feedback de carregamento
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    
+    if (!email || !senha) {
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const res = await api.post("/api/users/login", {
@@ -16,16 +24,23 @@ export default function Login() {
         senha: senha,
       });
 
-      // salva o user no localStorage depois do login
-      localStorage.setItem("user", JSON.stringify(res.data));
+      // 1. Preparação para JWT: Se a API retornar token, já deixamos configurado
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+      }
 
-      setTimeout(() => {
-            navigate("/home");
-        }, 1000);
+      // 2. Salva os dados do utilizador (seja o objeto todo ou apenas a parte 'user')
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      // 3. Navegação imediata ou com pequeno delay para UX
+      navigate("/home");
 
     } catch (err) {
-      alert("Email ou senha incorretos.");
-      console.error(err);
+      console.error("Erro ao fazer login:", err);
+      const mensagemErro = err.response?.data?.message || "Email ou senha incorretos.";
+      alert(mensagemErro);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,13 +49,13 @@ export default function Login() {
       <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center px-4">
         <div className="w-full max-w-md bg-slate-900/70 border border-slate-700/70 rounded-2xl shadow-2xl backdrop-blur-sm p-8">
           
-          {/* Logo / título */}
+          {/* Logo / Título */}
           <div className="mb-8 text-center">
             <h1 className="text-2xl font-semibold text-slate-50">
               Expense Tracker
             </h1>
             <p className="mt-1 text-sm text-slate-400">
-              Entre para visualizar e gerenciar seus gastos.
+              Entre para visualizar e gerenciar os seus gastos.
             </p>
           </div>
 
@@ -56,6 +71,7 @@ export default function Login() {
               <input
                 id="email"
                 type="email"
+                required
                 placeholder="seuemail@exemplo.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -81,6 +97,7 @@ export default function Login() {
               <input
                 id="password"
                 type="password"
+                required
                 placeholder="••••••••"
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
@@ -89,7 +106,7 @@ export default function Login() {
             </div>
 
             <div className="flex items-center justify-between text-xs text-slate-400 mb-3">
-              <label className="flex items-center gap-2">
+              <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   className="h-4 w-4 rounded border-slate-600 bg-slate-900 text-blue-500 focus:ring-blue-500"
@@ -100,14 +117,17 @@ export default function Login() {
 
             <button
               type="submit"
-              className="mt-2 w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-blue-900/40 transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+              disabled={loading}
+              className={`mt-2 w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-blue-900/40 transition focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-slate-900 ${
+                loading ? "opacity-70 cursor-not-allowed" : "hover:bg-blue-500"
+              }`}
             >
-              Entrar
+              {loading ? "A entrar..." : "Entrar"}
             </button>
           </form>
 
           {/* Rodapé */}
-          <p className="mt-6 text-center text-xs text-slate-500 place-content-center">
+          <p className="mt-6 text-center text-xs text-slate-500">
             Novo aqui?{" "}
             <Link
               to="/register"

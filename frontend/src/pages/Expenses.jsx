@@ -1,15 +1,66 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../components/styles/numberFix.css";
 import Navbar from "../components/Navbar";
+import api from "../service/apiConnection";
 
 
 export default function Expenses() {
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-black/10">
-            <h1 className="text-3xl font-bold">Você não tem nenhum resultado disponível.</h1>
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchExpenses() {
+      try {
+        // 1. Pegar o usuário do localStorage
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+        console.log(storedUser);
+        
+        if (storedUser && storedUser.id) {
+          // 2. Chamar a API usando o ID dele
+          const res = await api.get(`/api/users/${storedUser.id}`);
+          setUserData(res.data);
+        }
+      } catch (err) {
+        console.error("Erro ao carregar despesas", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchExpenses();
+  }, []);
+
+  if (loading) return <div className="text-white text-center mt-10">Carregando...</div>;
+
+  return (
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-slate-950 p-8 text-white">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-3xl font-bold text-blue-400 mb-6">Suas Despesas</h1>
+          
+          {userData?.expenses?.length > 0 ? (
+            <div className="grid gap-4">
+              {userData.expenses.map((exp) => (
+                <div key={exp.id} className="bg-slate-900 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                  <div>
+                    <p className="font-semibold text-lg">{exp.description}</p>
+                    <p className="text-sm text-slate-400">{new Date(exp.date).toLocaleDateString()}</p>
+                  </div>
+                  <p className="text-xl font-bold text-red-400">R$ {exp.value.toFixed(2)}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-20 bg-slate-900/50 rounded-2xl border border-dashed border-slate-700">
+                <h1 className="text-xl text-slate-400">Você não tem nenhum gasto registrado.</h1>
+            </div>
+          )}
         </div>
-    );
+      </div>
+    </>
+  );
 }
 
 // --- Formulário Inicial ---
@@ -45,26 +96,39 @@ export function BudgetForm() {
     setObjetivos(clone);
   }
 
-  function handleSubmit(e) {
-    try {
-        e.preventDefault();
-        console.log({
-            orcamentoBruto,
-            despesas,
-            objetivos
-        });
-        alert("Formulário enviado!");
-
-        setTimeout(() => {
-            navigate("/expenses");
-        }, 1000);
-
-    } catch {
-        console.error("Erro ao enviar formulário.");
-        alert("Erro ao enviar formulário. Tente novamente.");
-    }
+  async function handleSubmit(e) {
+    e.preventDefault();
     
-  }
+    // Recupera o usuário logado para pegar o ID
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    console.log(storedUser.id);
+    if (!storedUser || !storedUser.id) {
+        alert("Sessão expirada. Faça login novamente.");
+        return;
+    }
+
+    try {
+        // Criamos uma lista de promessas para enviar todas as despesas
+        const promises = despesas.map(d => {
+        return api.post("/api/expense", {
+            Budget: parseFloat(orcamentoBruto),
+            Description: d.descricao,
+            Value: parseFloat(d.valor),
+            Date: new Date().toISOString(),
+            UsersID: storedUser.id, // ID do usuário logado
+            CategoryID: 7  
+        });
+        });
+
+        await Promise.all(promises);
+        
+        alert("Despesas salvas com sucesso!");
+        navigate("/expenses");
+    } catch (err) {
+        console.error("Erro ao salvar despesas:", err.response?.data || err.message);
+        alert("Erro ao salvar. Verifique se todos os campos estão preenchidos.");
+    }
+    }
 
   return (
     <>

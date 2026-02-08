@@ -33,11 +33,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var app = builder.Build();
 
 
-// app.UseCors("AllowReact");
+app.UseCors("AllowReact");
 
-// app.UseMiddleware<AuthMiddleware>();
+app.UseMiddleware<AuthMiddleware>();
 
 // Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -54,5 +55,21 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+// using (var scope = app.Services.CreateScope())
+// {
+//     var services = scope.ServiceProvider;
+//     var context = services.GetRequiredService<AppDbContext>();
+    
+//     // Garante que o banco e as tabelas existam
+//     context.Database.EnsureCreated();
+
+//     // Adiciona uma categoria se não houver nenhuma
+//     if (!context.Categories.Any())
+//     {
+//         context.Categories.Add(new Category { Id = 1, Name = "Geral", Icon = "💰" });
+//         context.SaveChanges();
+//     }
+// }
 
 app.Run();

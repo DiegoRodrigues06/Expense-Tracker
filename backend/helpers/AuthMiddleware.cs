@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace backend.helpers
 {
@@ -15,6 +16,27 @@ namespace backend.helpers
 
         public async Task InvokeAsync(HttpContext context)
         {
+            // --- NOVA LÓGICA: Pular validação para Login e Cadastro ---
+            var path = context.Request.Path.Value?.ToLower();
+
+            // Adicione a rota /api/expense na lista de permissões temporária
+            if (path == "/api/users/login" || 
+                path.StartsWith("/api/users/") || 
+                path.StartsWith("/api/expense") || // Libera as despesas
+                (path == "/api/users" && context.Request.Method == "POST"))
+            {
+                await _next(context);
+                return;
+            }
+
+
+            if (path == "/api/users/login" || (path == "/api/users" && context.Request.Method == "POST"))
+            {
+                await _next(context);
+                return;
+            }
+            // ---------------------------------------------------------
+
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token == null)
@@ -29,7 +51,6 @@ namespace backend.helpers
                 var handler = new JwtSecurityTokenHandler();
                 var jwt = handler.ReadJwtToken(token);
 
-                // exemplo: pegar o id do usuário do token
                 var userId = jwt.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
 
                 if (userId == null)
@@ -39,7 +60,6 @@ namespace backend.helpers
                     return;
                 }
 
-                // salvar dados do usuário para uso no controller
                 context.Items["UserId"] = userId;
             }
             catch

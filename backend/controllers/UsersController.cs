@@ -4,6 +4,7 @@ using backend.models;
 using backend.dto;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.controller
 {
@@ -80,6 +81,7 @@ namespace backend.controller
         }
 
         // ---- Função Login ----
+        [AllowAnonymous]
         [HttpPost("login")]
         public IActionResult Login([FromBody] UserDto.LoginDto loginDto)
         {
@@ -94,8 +96,17 @@ namespace backend.controller
 
             if (user == null)
                 return Unauthorized("Email ou senha incorretos.");
+            
+            var tokenGerado = "tokenBraboDaSilva";
 
-            return Ok();
+            return Ok(new { 
+                token = tokenGerado,
+                user = new { 
+                    id = user.Id, 
+                    name = user.Name, 
+                    email = user.Email 
+                } 
+            });
 
             } catch (Exception) 
             {

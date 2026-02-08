@@ -8,7 +8,7 @@ namespace backend.models
         public decimal Budget { get; set;}
         public string Description { get; set; }
         public decimal Value { get; set; }
-        public string Goal { get; set; }
+        public string? Goal { get; set; }
         public DateTime Date { get; set; }
 
         //  chave estrangeira
