@@ -1,0 +1,7 @@
+npm-debug.log
+.env
+dist
+build
+bin/
+obj/
+global.json

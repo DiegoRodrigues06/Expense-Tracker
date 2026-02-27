@@ -29,7 +29,7 @@ export default function Home() {
                         </a>
 
                         <a
-                            href="/expenses/budget-form"
+                            href="/expenses"
                             className="px-6 py-3 rounded-lg text-blue-300 font-medium border border-blue-600 hover:border-blue-400 hover:text-blue-200 transition"
                         >
                             Gerenciar Gastos
